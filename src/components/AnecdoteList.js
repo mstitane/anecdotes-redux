@@ -4,7 +4,13 @@ import Anecdote from './Anecdote'
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
-  const list = useSelector(state => state.sort((a, b) => b.votes - a.votes))
+  const list = useSelector(({ anecdotes, filter }) => {
+    console.log(filter)
+    if (filter !== 'ALL')
+      return anecdotes.filter(a=> a.content.includes(filter)).sort((a, b) => b.votes - a.votes)
+    else
+      return anecdotes.sort((a, b) => b.votes - a.votes)
+  })
 
   return (
     <div>
