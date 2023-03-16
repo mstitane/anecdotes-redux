@@ -1,34 +1,40 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { vote } from '../reducers/AnecdoteReducer'
 import Anecdote from './Anecdote'
+import { showNotification } from '../reducers/NotificationReducer'
 
 const AnecdoteList = () => {
-  const dispatch = useDispatch()
-  const list = useSelector(({ anecdotes, filter }) => {
-    console.log(filter)
-    if (filter !== 'ALL')
-      return anecdotes.filter(a=> a.content.includes(filter)).sort((a, b) => b.votes - a.votes)
-    else
-      return anecdotes.sort((a, b) => b.votes - a.votes)
-  })
+	const dispatch = useDispatch()
+	const anecdotes = useSelector(({ anecdotes, filter }) => {
+		let list = []
 
-  return (
-    <div>
-      <ul>
-        {
-          list.map(anc =>
-            <Anecdote
-              key={anc.id}
-              anecdote={anc}
-              handleClick={() =>
-                dispatch(vote(anc.id))
-              }
-            />
-          )
-        }
-      </ul>
-    </div>
-  )
+		if (filter !== '')
+			list = anecdotes.filter(a => a.content.includes(filter))
+		else
+			list = anecdotes
+			return [...list].sort((a, b) => b.votes - a.votes)
+	})
+
+	const voteHandler = (anecdote) => {
+		dispatch(vote(anecdote.id))
+		dispatch(showNotification(`Voted for '${anecdote.content}'`, 5000))
+	}
+
+	return (
+		<div>
+			<ul>
+				{
+					anecdotes.map(anc =>
+						<Anecdote
+							key={anc.id}
+							anecdote={anc}
+							handleClick={() => voteHandler(anc)}
+						/>
+					)
+				}
+			</ul>
+		</div>
+	)
 }
 
 export default AnecdoteList
