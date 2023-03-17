@@ -12,7 +12,8 @@ const AnecdoteList = () => {
 			list = anecdotes.filter(a => a.content.includes(filter))
 		else
 			list = anecdotes
-			return [...list].sort((a, b) => b.votes - a.votes)
+
+		return [...list].sort((a, b) => b.votes - a.votes)
 	})
 
 	const voteHandler = (anecdote) => {
