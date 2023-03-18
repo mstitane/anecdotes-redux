@@ -12,6 +12,13 @@ const create = async (content) => {
 	return response.data
 }
 
+const voting = async (anecdote) => {
+	let url = baseUrl + '/' + anecdote.id
+	const updatedAnecdote = { ...anecdote, votes: anecdote.votes + 1 }
+	const res = await axios.put(url, updatedAnecdote)
+	return res.data
+}
+
 const generateId = () =>
 	Number((Math.random() * 1000000).toFixed(0))
 
@@ -23,5 +30,5 @@ const asObject = (content) => {
 	}
 }
 
-const anecdoteService = { getAll, create }
+const anecdoteService = { getAll, create, voting }
 export default anecdoteService
